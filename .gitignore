@@ -1,0 +1,12 @@
+# Entorno virtual
+venv/
+
+# Archivos temporales de Python (aparecerán pronto)
+__pycache__/
+*.py[cod]
+
+# Archivos específicos de macOS
+.DS_Store
+
+# Datos (opcional: si vas a manejar Big Data muy pesado, mejor no subirlo a GitHub)
+# data/
