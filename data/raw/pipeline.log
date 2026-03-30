@@ -1,0 +1,38 @@
+Archivo guardado: /Users/david/Documents/scraper/data/raw/precios_portatiles_20260330_1302.csv
+plataforma
+PcComponentes    25
+Amazon           24
+Name: count, dtype: int64
+                                              nombre  ...             fecha
+0  Portátil Alurin Flex Advance AMD Ryzen 7-5825U...  ...  2026-03-30 13:02
+1  PcCom Revolt 5070 Intel Core i7-14650HX 16"/QH...  ...  2026-03-30 13:02
+2  Portátil Lenovo LOQ 15IRX10 15.6" Intel Core i...  ...  2026-03-30 13:02
+3  Portátil Lenovo Legion 5 15AHP10 15.1" AMD Ryz...  ...  2026-03-30 13:02
+4  Portátil Acer Nitro V 16 AI 16" AMD Ryzen 7 26...  ...  2026-03-30 13:02
+5  Apple Macbook Air Apple M4 10 Núcleos/16 GB/25...  ...  2026-03-30 13:02
+6  Acer Aspire Go 15 AG15-42P-R26T 15.6″ AMD Ryze...  ...  2026-03-30 13:02
+7  Portátil Lenovo IdeaPad Slim 3 15AMN8 15,6" AM...  ...  2026-03-30 13:02
+8  Portátil Lenovo Yoga Slim 7 14IMH9 14" Intel C...  ...  2026-03-30 13:02
+9  Lenovo IdeaPad Slim 3 Gen 8 15IRH8 Intel Core ...  ...  2026-03-30 13:02
+
+[10 rows x 7 columns]
+Procesado guardado en: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260330_1302.csv
+Archivo guardado: /Users/david/Documents/scraper/data/raw/precios_portatiles_20260330_1303.csv
+plataforma
+PcComponentes    25
+Amazon           24
+Name: count, dtype: int64
+                                              nombre  ...             fecha
+0  Portátil Alurin Flex Advance AMD Ryzen 7-5825U...  ...  2026-03-30 13:03
+1  PcCom Revolt 5070 Intel Core i7-14650HX 16"/QH...  ...  2026-03-30 13:03
+2  Portátil Lenovo LOQ 15IRX10 15.6" Intel Core i...  ...  2026-03-30 13:03
+3  Portátil Lenovo Legion 5 15AHP10 15.1" AMD Ryz...  ...  2026-03-30 13:03
+4  Apple Macbook Air Apple M4 10 Núcleos/16 GB/25...  ...  2026-03-30 13:03
+5  Portátil Lenovo IdeaPad Slim 3 15AMN8 15,6" AM...  ...  2026-03-30 13:03
+6  Lenovo IdeaPad Slim 3 Gen 8 15IRH8 Intel Core ...  ...  2026-03-30 13:03
+7  Portátil Lenovo Legion Pro 5 16IRX10 16" Intel...  ...  2026-03-30 13:03
+8  Portátil HP 15-fd0278ns 15.6" Intel Core i5-13...  ...  2026-03-30 13:03
+9  MSI Vector 16 HX AI A2XWHG-097XES Intel Core U...  ...  2026-03-30 13:03
+
+[10 rows x 7 columns]
+Procesado guardado en: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260330_1303.csv
