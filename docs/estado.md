@@ -14,6 +14,8 @@ Rama de trabajo: dev
 - Automatización diaria efectiva activada con `crontab` (09:00):
 	- `0 9 * * * /Users/david/Documents/scraper/scripts/run_daily_pipeline.sh`
 - Ingesta alternativa para datasets externos (Plan E): `src/ingest_external_dataset.py`.
+- Notebook de analisis temporal creado: `notebooks/analisis_temporal_tfg.ipynb`.
+
 
 ## Objetivo
 Extraer precios de portátiles para análisis de dynamic pricing en e-commerce español.
@@ -178,3 +180,19 @@ Nota operativa importante en macOS:
 ## Fuente alternativa (Plan E) ya preparada
 
 Si MediaMarkt sigue bloqueado, el módulo `src/ingest_external_dataset.py` permite incorporar un CSV externo (Kaggle u otra fuente pública) al mismo esquema de columnas para mantener continuidad histórica y consistencia metodológica.
+
+## Estado del analisis temporal
+
+Notebook activo: `notebooks/analisis_temporal_tfg.ipynb`.
+
+Resultados actuales con el ultimo dataset procesado:
+
+- Observaciones analizadas: 49
+- Plataformas detectadas: Amazon y PcComponentes
+- Precio medio Amazon: 431.08 EUR
+- Precio medio PcComponentes: 957.28 EUR
+
+Interpretacion:
+
+- El pipeline analitico ya funciona de extremo a extremo.
+- Como aun hay pocos dias acumulados, la variacion temporal inter-diaria es limitada y se espera que aumente al consolidar historico diario.

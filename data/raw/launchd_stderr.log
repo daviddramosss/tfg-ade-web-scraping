@@ -1,2 +1,4 @@
 shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
 /bin/zsh: can't open input file: /Users/david/Documents/scraper/scripts/run_daily_pipeline.sh
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+/bin/zsh: can't open input file: /Users/david/Documents/scraper/scripts/run_daily_pipeline.sh
