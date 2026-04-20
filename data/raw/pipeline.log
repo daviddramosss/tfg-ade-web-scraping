@@ -36,3 +36,47 @@ Name: count, dtype: int64
 
 [10 rows x 7 columns]
 Procesado guardado en: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260330_1303.csv
+[Sun Apr 19 18:09:48 CEST 2026] Iniciando scraping...
+Archivo guardado: /Users/david/Documents/scraper/data/raw/precios_portatiles_20260419_1810.csv
+plataforma
+PcComponentes    25
+Amazon           25
+Name: count, dtype: int64
+                                              nombre  ...             fecha
+0  Portátil Alurin Flex Advance AMD Ryzen 7-5825U...  ...  2026-04-19 18:09
+1  PcCom Revolt 5060 Intel Core i7-14650HX 16" /1...  ...  2026-04-19 18:09
+2  MSI Cyborg 15 B2RWFKG-201XES Intel Core 7 240H...  ...  2026-04-19 18:09
+3  Portátil Lenovo Legion 5 15AHP10 15.1" AMD Ryz...  ...  2026-04-19 18:09
+4  Portátil Lenovo IdeaPad Slim 3 15AMN8 15,6" AM...  ...  2026-04-19 18:09
+5  Portátil Lenovo IdeaPad Slim 3 15IRH10 15,3" I...  ...  2026-04-19 18:09
+6  Portátil Lenovo Legion 5 15AHP10 15.3" AMD Ryz...  ...  2026-04-19 18:09
+7  Apple Macbook Air Apple M4 10 Núcleos/16 GB/25...  ...  2026-04-19 18:09
+8  Apple Macbook Air Apple M4 10 Núcleos/16 GB/51...  ...  2026-04-19 18:09
+9  Acer Aspire Go 15 AG15-42P-R26T 15.6″ AMD Ryze...  ...  2026-04-19 18:09
+
+[10 rows x 7 columns]
+[Sun Apr 19 18:10:09 CEST 2026] Iniciando ETL...
+Procesado guardado en: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260419_1810.csv
+[Sun Apr 19 18:10:09 CEST 2026] Pipeline completado.
+[Sun Apr 19 18:13:19 CEST 2026] Iniciando scraping...
+Archivo guardado: /Users/david/Documents/scraper/data/raw/precios_portatiles_20260419_1813.csv
+plataforma
+PcComponentes    25
+Amazon           25
+Name: count, dtype: int64
+                                              nombre  ...             fecha
+0  Portátil Alurin Flex Advance AMD Ryzen 7-5825U...  ...  2026-04-19 18:13
+1  PcCom Revolt 5060 Intel Core i7-14650HX 16" /1...  ...  2026-04-19 18:13
+2  MSI Cyborg 15 B2RWFKG-201XES Intel Core 7 240H...  ...  2026-04-19 18:13
+3  Portátil Lenovo Legion 5 15AHP10 15.1" AMD Ryz...  ...  2026-04-19 18:13
+4  Portátil Lenovo IdeaPad Slim 3 15AMN8 15,6" AM...  ...  2026-04-19 18:13
+5  Portátil Lenovo IdeaPad Slim 3 15IRH10 15,3" I...  ...  2026-04-19 18:13
+6  Portátil Lenovo Legion 5 15AHP10 15.3" AMD Ryz...  ...  2026-04-19 18:13
+7  Apple Macbook Air Apple M4 10 Núcleos/16 GB/25...  ...  2026-04-19 18:13
+8  Apple Macbook Air Apple M4 10 Núcleos/16 GB/51...  ...  2026-04-19 18:13
+9  Acer Aspire Go 15 AG15-42P-R26T 15.6″ AMD Ryze...  ...  2026-04-19 18:13
+
+[10 rows x 7 columns]
+[Sun Apr 19 18:13:35 CEST 2026] Iniciando ETL...
+Procesado guardado en: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260419_1813.csv
+[Sun Apr 19 18:13:36 CEST 2026] Pipeline completado.

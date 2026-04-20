@@ -92,24 +92,15 @@ async def scrape_pccomponentes(config: ScrapeConfig) -> list[dict[str, Any]]:
         )
         await page.wait_for_timeout(config.wait_after_load_ms)
 
-        title_locator = page.locator("h3.product-card__title")
-        price_locator = page.locator("[data-e2e='price-card']")
-        crossed_locator = page.locator("[data-e2e='crossedPrice']")
-
-        title_count = await title_locator.count()
-        price_count = await price_locator.count()
-        crossed_count = await crossed_locator.count()
-
-        total = min(title_count, config.max_items_per_platform)
+        cards = page.locator(".product-card")
+        total = min(await cards.count(), config.max_items_per_platform)
         for i in range(total):
-            name = (await title_locator.nth(i).inner_text()).strip()
-            current_price = None
-            original_price = None
-
-            if i < price_count:
-                current_price = (await price_locator.nth(i).inner_text()).strip()
-            if i < crossed_count:
-                original_price = (await crossed_locator.nth(i).inner_text()).strip()
+            card = cards.nth(i)
+            name = await _safe_text(card.locator("h3.product-card__title"))
+            if not name:
+                continue
+            current_price = await _safe_text(card.locator("[data-e2e='price-card']"))
+            original_price = await _safe_text(card.locator("[data-e2e='crossedPrice']"))
 
             rows.append(
                 {

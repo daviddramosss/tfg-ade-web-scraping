@@ -1,14 +1,17 @@
-#!/bin/zsh
-set -euo pipefail
+#!/bin/bash
 
-PROJECT_DIR="/Users/david/Documents/scraper"
-PYTHON_BIN="/Users/david/Documents/scraper/venv/bin/python"
-LOG_DIR="$PROJECT_DIR/data/raw"
+# Ruta absoluta al proyecto
+PROJECT="/Users/david/Documents/scraper"
 
-cd "$PROJECT_DIR"
+# Activar entorno virtual
+source "$PROJECT/venv/bin/activate"
 
-# 1) Scraping diario
-"$PYTHON_BIN" src/scraper.py >> "$LOG_DIR/pipeline.log" 2>&1
+# Ejecutar scraper
+echo "[$(date)] Iniciando scraping..." >> "$PROJECT/data/raw/pipeline.log"
+python "$PROJECT/src/scraper.py" >> "$PROJECT/data/raw/pipeline.log" 2>&1
 
-# 2) ETL diario
-"$PYTHON_BIN" src/etl.py >> "$LOG_DIR/pipeline.log" 2>&1
+# Ejecutar ETL
+echo "[$(date)] Iniciando ETL..." >> "$PROJECT/data/raw/pipeline.log"
+python "$PROJECT/src/etl.py" >> "$PROJECT/data/raw/pipeline.log" 2>&1
+
+echo "[$(date)] Pipeline completado." >> "$PROJECT/data/raw/pipeline.log"
