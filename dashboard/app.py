@@ -361,7 +361,8 @@ app.layout = html.Div([
             dbc.Col([
                 html.Div(className="graph-container", children=[
                     html.H3("Serie Temporal de Precios", className="section-title"),
-                    dcc.Graph(id='line-evolution', style={'height': '400px'})
+                    dcc.Graph(id='line-evolution', style={'height': '400px'},
+                              config={'displayModeBar': False})
                 ])
             ], lg=12)
         ], style={'marginBottom': '30px'}),
@@ -371,7 +372,8 @@ app.layout = html.Div([
             dbc.Col([
                 html.Div(className="graph-container", children=[
                     html.H3("Análisis de Dispersión", className="section-title"),
-                    dcc.Graph(id='scatter-dispersion', style={'height': '400px'})
+                    dcc.Graph(id='scatter-dispersion', style={'height': '400px'},
+                              config={'displayModeBar': False})
                 ])
             ], lg=6, md=12),
 
@@ -455,11 +457,11 @@ def update_dashboard(selected_brands, selected_platforms):
         fig_line.update_layout(
             template='plotly_white',
             hovermode='x unified',
-            margin=dict(l=0, r=0, t=0, b=0),
+            margin=dict(l=0, r=0, t=20, b=60),
             plot_bgcolor='white',
             paper_bgcolor='white',
             font=dict(family='Segoe UI, sans-serif', size=12, color='#1a1a2e'),
-            legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+            legend=dict(orientation='h', yanchor='top', y=-0.15, xanchor='center', x=0.5),
             xaxis=dict(gridcolor='#E8EAED', zeroline=False),
             yaxis=dict(gridcolor='#E8EAED', zeroline=False),
         )
@@ -467,12 +469,30 @@ def update_dashboard(selected_brands, selected_platforms):
         fig_line = go.Figure().add_annotation(text="Sin datos disponibles", showarrow=False)
         fig_line.update_layout(template='plotly_white')
 
-    # ===== TABLA DESCUENTOS =====
+    # ===== TABLA DESCUENTOS (TOP 5 con hipervínculos) =====
     if len(dff) > 0:
         latest_date = dff['fecha_extraccion'].max()
-        table_data = dff[dff['fecha_extraccion'] == latest_date].sort_values('descuento_pct', ascending=False).head(10)
+        table_data = dff[dff['fecha_extraccion'] == latest_date].sort_values('descuento_pct', ascending=False).head(5)
     else:
         table_data = pd.DataFrame()
+
+    def _render_product_cell(row):
+        """Renderiza el nombre como hipervínculo si existe 'enlace', si no como texto plano."""
+        nombre = row['nombre']
+        enlace = row.get('enlace') if 'enlace' in row else None
+        if pd.notna(enlace) and str(enlace).strip().startswith('http'):
+            return html.A(
+                nombre,
+                href=str(enlace),
+                target="_blank",
+                rel="noopener noreferrer",
+                style={
+                    'color': '#007185',
+                    'textDecoration': 'none',
+                    'fontWeight': '500'
+                }
+            )
+        return nombre
 
     if len(table_data) > 0:
         table = dbc.Table(
@@ -487,7 +507,7 @@ def update_dashboard(selected_brands, selected_platforms):
                 ),
                 html.Tbody([
                     html.Tr([
-                        html.Td(row['nombre'][:40] + '...' if len(row['nombre']) > 40 else row['nombre'],
+                        html.Td(_render_product_cell(row),
                                style={'fontSize': '12px', 'borderColor': '#E8EAED'}),
                         html.Td(row['plataforma'], style={'fontSize': '12px', 'borderColor': '#E8EAED', 'fontWeight': '600'}),
                         html.Td(f"€{row['precio_actual_num']:.0f}", style={'fontSize': '12px', 'textAlign': 'center', 'borderColor': '#E8EAED', 'fontWeight': '600'}),
@@ -528,13 +548,14 @@ def update_dashboard(selected_brands, selected_platforms):
 
         fig_box.update_layout(
             template='plotly_white',
-            margin=dict(l=0, r=0, t=0, b=0),
+            margin=dict(l=0, r=0, t=20, b=60),
             plot_bgcolor='white',
             paper_bgcolor='white',
             font=dict(family='Segoe UI, sans-serif', size=12, color='#1a1a2e'),
             yaxis=dict(gridcolor='#E8EAED', zeroline=False),
             xaxis=dict(gridcolor='#E8EAED', zeroline=False),
-            showlegend=False,
+            legend=dict(orientation='h', yanchor='top', y=-0.15, xanchor='center', x=0.5),
+            showlegend=True,
             hovermode='closest'
         )
     else:
@@ -545,3 +566,45 @@ def update_dashboard(selected_brands, selected_platforms):
 
 if __name__ == '__main__':
     app.run(debug=True, port=8050)
+
+
+# ============================================================================
+# DOCUMENTACIÓN TÉCNICA
+# ============================================================================
+#
+# LÓGICA DE "TOP OPORTUNIDADES"
+# -----------------------------
+# El ranking de "Top Oportunidades" identifica los 5 portátiles con el mayor
+# descuento porcentual disponibles en la fecha más reciente del dataset.
+#
+# Pasos de cálculo:
+#
+#   1. FILTRADO TEMPORAL:
+#      Se aísla únicamente el subconjunto de registros correspondientes a la
+#      última fecha disponible tras aplicar los filtros activos del usuario:
+#          latest_date = dff['fecha_extraccion'].max()
+#          table_data  = dff[dff['fecha_extraccion'] == latest_date]
+#
+#   2. ORDENACIÓN POR DESCUENTO:
+#      Los productos se ordenan de forma descendente por la columna
+#      'descuento_pct', que fue calculada en el ETL mediante la fórmula:
+#
+#          descuento_pct = ((precio_original - precio_actual) / precio_original) * 100
+#
+#      Esta métrica garantiza comparabilidad entre plataformas con distintas
+#      escalas de precio.
+#
+#   3. LÍMITE TOP-N:
+#      Se retiene únicamente el Top 5 (`.head(5)`) para priorizar claridad
+#      visual y evitar sobrecarga de información en la interfaz.
+#
+#   4. ENLACE AL PRODUCTO:
+#      Cada fila incluye el nombre como hipervínculo (<a target="_blank">)
+#      construido a partir de la columna 'enlace', capturada por los scrapers
+#      y preservada íntegra en el ETL.
+#
+# VALIDACIÓN:
+#   - Los descuentos con precio_original < precio_actual se descartan en el ETL
+#     (retornan None en `_compute_discount_pct`), evitando falsos positivos.
+#   - Si no hay datos tras el filtrado, la tabla muestra "Sin datos disponibles".
+# ============================================================================

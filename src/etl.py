@@ -30,6 +30,7 @@ EXPECTED_COLUMNS = [
     "valoracion",
     "plataforma",
     "fecha",
+    "enlace",
 ]
 
 FINAL_COLUMNS = [
@@ -40,6 +41,7 @@ FINAL_COLUMNS = [
     "valoracion",
     "plataforma",
     "fecha",
+    "enlace",
     "precio_actual_num",
     "precio_original_num",
     "descuento_pct",

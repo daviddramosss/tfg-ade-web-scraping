@@ -68,6 +68,29 @@ async def _safe_text(locator) -> str | None:
         return None
 
 
+async def _safe_href(locator, base_url: str = "") -> str | None:
+    """
+    Extrae el atributo href de un elemento. Si la URL es relativa y se
+    proporciona base_url, la convierte en absoluta.
+    """
+    try:
+        if await locator.count() == 0:
+            return None
+        href = await locator.first.get_attribute("href", timeout=1500)
+        if not href:
+            return None
+        href = href.strip()
+        if href.startswith("http"):
+            return href
+        if base_url and href.startswith("/"):
+            return base_url.rstrip("/") + href
+        if base_url:
+            return base_url.rstrip("/") + "/" + href
+        return href
+    except Exception:
+        return None
+
+
 def _build_price(whole: str | None, frac: str | None, fallback: str | None) -> str | None:
     if whole:
         w = whole.replace(".", "").replace("€", "").strip()
@@ -101,6 +124,7 @@ async def scrape_pccomponentes(config: ScrapeConfig) -> list[dict[str, Any]]:
                 continue
             current_price = await _safe_text(card.locator("[data-e2e='price-card']"))
             original_price = await _safe_text(card.locator("[data-e2e='crossedPrice']"))
+            enlace = await _safe_href(card.locator("a"), base_url="https://www.pccomponentes.com")
 
             rows.append(
                 {
@@ -111,6 +135,7 @@ async def scrape_pccomponentes(config: ScrapeConfig) -> list[dict[str, Any]]:
                     "valoracion": None,
                     "plataforma": "PcComponentes",
                     "fecha": timestamp,
+                    "enlace": enlace,
                 }
             )
     finally:
@@ -145,6 +170,10 @@ async def scrape_amazon(config: ScrapeConfig) -> list[dict[str, Any]]:
             current_price = _build_price(whole, frac, fallback_price)
             original_price = await _safe_text(card.locator("span.a-text-price span.a-offscreen"))
             rating = await _safe_text(card.locator("span.a-icon-alt"))
+            enlace = await _safe_href(
+                card.locator("h2 a, a.a-link-normal.s-no-outline"),
+                base_url="https://www.amazon.es"
+            )
 
             if not name or not current_price:
                 continue
@@ -158,6 +187,7 @@ async def scrape_amazon(config: ScrapeConfig) -> list[dict[str, Any]]:
                     "valoracion": rating,
                     "plataforma": "Amazon",
                     "fecha": timestamp,
+                    "enlace": enlace,
                 }
             )
     finally:
@@ -203,6 +233,10 @@ async def scrape_elcorteingles(config: ScrapeConfig) -> list[dict[str, Any]]:
 
             current_price = await _safe_text(card.locator(".price-sale, .price-unit--normal"))
             original_price = await _safe_text(card.locator(".price-unit--original"))
+            enlace = await _safe_href(
+                card.locator("a.product_preview-title"),
+                base_url="https://www.elcorteingles.es"
+            )
 
             if current_price:
                 rows.append({
@@ -212,7 +246,8 @@ async def scrape_elcorteingles(config: ScrapeConfig) -> list[dict[str, Any]]:
                     "descuento": None,
                     "valoracion": None,
                     "plataforma": "ElCorteIngles",
-                    "fecha": timestamp
+                    "fecha": timestamp,
+                    "enlace": enlace,
                 })
     except Exception as e:
         print(f"Error en ElCorteIngles: {type(e).__name__}: {e}")
