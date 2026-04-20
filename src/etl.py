@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -12,20 +13,27 @@ PROCESSED_DIR = BASE_DIR / "data" / "processed"
 
 
 def _to_float_eur(value: object) -> float | None:
-    if value is None:
+    if pd.isna(value) or value is None:
         return None
+        
     text = str(value).strip()
     if not text or text.lower() == "nan":
         return None
 
-    # Normaliza formatos mezclados: "1.299,99€", "399,.99", "899€".
-    text = text.replace("€", "").replace("\xa0", "").replace(" ", "")
-    text = text.replace(".", "")
-    text = text.replace(",.", ".")
-    text = text.replace(",", ".")
+    # Usamos Regex para buscar SOLO la primera coincidencia de números, puntos y comas.
+    # Así ignoramos automáticamente frases como "Precio de venta " o "Rebajado ".
+    match = re.search(r'[\d\.,]+', text)
+    if not match:
+        return None
+        
+    numero_str = match.group()
+
+    # Normalizamos el formato europeo al estándar matemático de Python
+    numero_str = numero_str.replace(".", "")  # Quitamos separador de miles
+    numero_str = numero_str.replace(",", ".") # Convertimos coma decimal en punto
 
     try:
-        return float(text)
+        return float(numero_str)
     except ValueError:
         return None
 
@@ -48,6 +56,8 @@ def _normalize_platform(name: object) -> str:
         return "PcComponentes"
     if "mediamarkt" in text:
         return "MediaMarkt"
+    if "elcorteingles" in text or "el corte ingles" in text:
+        return "ElCorteIngles"
     return str(name).strip() or "Desconocida"
 
 
@@ -78,10 +88,14 @@ def transform_prices(df: pd.DataFrame) -> pd.DataFrame:
     ]
 
     out["fecha_extraccion"] = pd.to_datetime(out["fecha"], errors="coerce")
+    
+    # Filtro de calidad: eliminamos si falta nombre, precio numérico, plataforma o fecha
     out = out.dropna(subset=["nombre", "precio_actual_num", "plataforma", "fecha_extraccion"])
 
+    # Eliminamos duplicados
     out = out.drop_duplicates(subset=["nombre", "plataforma", "fecha_extraccion"], keep="last")
 
+    # Extraemos el año, mes y día para facilitar los gráficos en el dashboard
     out["anio"] = out["fecha_extraccion"].dt.year
     out["mes"] = out["fecha_extraccion"].dt.month
     out["dia"] = out["fecha_extraccion"].dt.day

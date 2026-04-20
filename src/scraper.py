@@ -166,7 +166,119 @@ async def scrape_amazon(config: ScrapeConfig) -> list[dict[str, Any]]:
     return rows
 
 
-async def run_daily_scrape(max_items_per_platform: int = 40, headless: bool = True) -> pd.DataFrame:
+# Dentro de src/scraper.py
+
+async def scrape_elcorteingles(config: ScrapeConfig) -> list[dict[str, Any]]:
+    context = await _new_context(config)
+    page = await context.new_page()
+    rows: list[dict[str, Any]] = []
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    try:
+        await page.goto("https://www.elcorteingles.es/informatica/portatiles/", wait_until="domcontentloaded", timeout=60000)
+        await page.wait_for_timeout(4000)
+
+        try:
+            cookie_btn = page.locator("#onetrust-accept-btn-handler")
+            if await cookie_btn.is_visible(timeout=3000):
+                await cookie_btn.click(force=True)
+            await page.keyboard.press("Escape")
+            await page.evaluate("document.querySelectorAll('iframe, div[class*=\"chat\"], div[class*=\"bot\"]').forEach(e => e.remove());")
+        except:
+            pass
+
+        for _ in range(5):
+            await page.mouse.wheel(0, 800)
+            await page.wait_for_timeout(1000)
+
+        cards = page.locator("article.product_preview")
+        total = await cards.count()
+        limit = min(total, config.max_items_per_platform)
+
+        for i in range(limit):
+            card = cards.nth(i)
+            name = await _safe_text(card.locator("a.product_preview-title"))
+            if not name:
+                continue
+
+            current_price = await _safe_text(card.locator(".price-sale, .price-unit--normal"))
+            original_price = await _safe_text(card.locator(".price-unit--original"))
+
+            if current_price:
+                rows.append({
+                    "nombre": name,
+                    "precio_actual": current_price,
+                    "precio_original": original_price,
+                    "descuento": None,
+                    "valoracion": None,
+                    "plataforma": "ElCorteIngles",
+                    "fecha": timestamp
+                })
+    except Exception as e:
+        print(f"Error en ElCorteIngles: {type(e).__name__}: {e}")
+    finally:
+        await _close_context(context)
+
+    return rows
+
+async def scrape_fnac(config: ScrapeConfig) -> list[dict[str, Any]]:
+    context = await _new_context(config)
+    page = await context.new_page()
+    rows: list[dict[str, Any]] = []
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    try:
+        await page.goto(
+            "https://www.fnac.es/Informatica/Portatiles/w-116-p-0-0-1.html",
+            wait_until="domcontentloaded",
+            timeout=config.timeout_ms,
+        )
+        await page.wait_for_timeout(config.wait_after_load_ms)
+
+        # Accept cookies if present
+        cookie_btn = page.locator("#didomi-notice-agree-button")
+        if await cookie_btn.count() > 0:
+            await cookie_btn.first.click()
+            await page.wait_for_timeout(1500)
+
+        cards = page.locator("li.Article-item")
+        total = min(await cards.count(), config.max_items_per_platform)
+
+        for i in range(total):
+            card = cards.nth(i)
+            name = await _safe_text(card.locator(".Article-title"))
+            if not name:
+                name = await _safe_text(card.locator("h3 a"))
+            if not name:
+                continue
+
+            current_price = await _safe_text(card.locator(".userPrice .finalPrice"))
+            if not current_price:
+                current_price = await _safe_text(card.locator(".userPrice"))
+            original_price = await _safe_text(card.locator(".old-price"))
+            rating_el = card.locator(".starsItem[aria-label]")
+            rating = None
+            if await rating_el.count() > 0:
+                rating = await rating_el.first.get_attribute("aria-label")
+
+            rows.append(
+                {
+                    "nombre": name,
+                    "precio_actual": current_price,
+                    "precio_original": original_price,
+                    "descuento": None,
+                    "valoracion": rating,
+                    "plataforma": "Fnac",
+                    "fecha": timestamp,
+                }
+            )
+    finally:
+        await _close_context(context)
+
+    return rows
+
+
+async def run_daily_scrape(max_items_per_platform: int = 40, headless: bool = False) -> pd.DataFrame:
     config = ScrapeConfig(max_items_per_platform=max_items_per_platform, headless=headless)
 
     try:
@@ -181,7 +293,19 @@ async def run_daily_scrape(max_items_per_platform: int = 40, headless: bool = Tr
         print(f"Error en Amazon: {type(e).__name__}: {e}")
         amazon_rows = []
 
-    all_rows = pc_rows + amazon_rows
+    try:
+        eci_rows = await scrape_elcorteingles(config)
+    except Exception as e:
+        print(f"Error en ElCorteIngles: {type(e).__name__}: {e}")
+        eci_rows = []
+
+    try:
+        fnac_rows = await scrape_fnac(config)
+    except Exception as e:
+        print(f"Error en Fnac: {type(e).__name__}: {e}")
+        fnac_rows = []
+
+    all_rows = pc_rows + amazon_rows + eci_rows + fnac_rows
     df = pd.DataFrame(all_rows)
 
     RAW_DIR.mkdir(parents=True, exist_ok=True)
@@ -194,5 +318,5 @@ async def run_daily_scrape(max_items_per_platform: int = 40, headless: bool = Tr
 
 
 if __name__ == "__main__":
-    result = asyncio.run(run_daily_scrape(max_items_per_platform=25, headless=True))
+    result = asyncio.run(run_daily_scrape(max_items_per_platform=25, headless=False))
     print(result.head(10))
