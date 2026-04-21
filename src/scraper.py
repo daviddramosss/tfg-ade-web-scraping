@@ -113,18 +113,37 @@ async def scrape_pccomponentes(config: ScrapeConfig) -> list[dict[str, Any]]:
             wait_until="domcontentloaded",
             timeout=config.timeout_ms,
         )
-        await page.wait_for_timeout(config.wait_after_load_ms)
+        await page.wait_for_selector(".product-card", timeout=10000)
+        await page.evaluate("window.scrollBy(0, 300)")
 
         cards = page.locator(".product-card")
-        total = min(await cards.count(), config.max_items_per_platform)
+        count = await cards.count()
+        total = min(count, config.max_items_per_platform)
+        print(f"-> PcComponentes: {count} tarjetas detectadas, extrayendo {total}...")
+
         for i in range(total):
             card = cards.nth(i)
-            name = await _safe_text(card.locator("h3.product-card__title"))
+
+            # NOMBRE (prioritario — sin nombre, la fila no vale)
+            title_el = card.locator("a.product-card__title-link")
+            name = await _safe_text(title_el)
+            if not name:
+                name = await _safe_text(card.locator(".product-card__title"))
             if not name:
                 continue
+
+            # ENLACE (opcional — nunca descarta la fila)
+            enlace = None
+            try:
+                href = await title_el.get_attribute("href", timeout=1500)
+                if href:
+                    href = href.strip()
+                    enlace = href if href.startswith("http") else f"https://www.pccomponentes.com{href}"
+            except Exception:
+                pass
+
             current_price = await _safe_text(card.locator("[data-e2e='price-card']"))
             original_price = await _safe_text(card.locator("[data-e2e='crossedPrice']"))
-            enlace = await _safe_href(card.locator("a"), base_url="https://www.pccomponentes.com")
 
             rows.append(
                 {
@@ -138,6 +157,8 @@ async def scrape_pccomponentes(config: ScrapeConfig) -> list[dict[str, Any]]:
                     "enlace": enlace,
                 }
             )
+    except Exception as e:
+        print(f"Error en scrape_pccomponentes: {type(e).__name__}: {e}")
     finally:
         await _close_context(context)
 
