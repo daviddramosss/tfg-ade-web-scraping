@@ -57,11 +57,21 @@ def load_data():
     processed_path = Path("data/processed")
 
     # --- Paso 1: Matching (tu flujo original) ---
-    proc_files = sorted(processed_path.glob("precios_portatiles_procesado_*.csv"))
+    # Búsqueda recursiva para incluir CSVs en subcarpetas (p. ej., simulado/)
+    proc_files = sorted(
+        f for f in processed_path.rglob("*.csv")
+        if f.name.startswith("precios_portatiles_procesado_")
+    )
     if not proc_files:
         return pd.DataFrame()
 
-    dfs = [pd.read_csv(f) for f in proc_files]
+    dfs = []
+    for f in proc_files:
+        part = pd.read_csv(f)
+        if 'es_simulado' not in part.columns:
+            part['es_simulado'] = False
+        dfs.append(part)
+
     df = match_across_files(dfs)
     df['fecha_extraccion'] = pd.to_datetime(df['fecha_extraccion'])
     df = df[df['nombre'].apply(_is_laptop)].copy()
@@ -549,7 +559,7 @@ def update_dashboard(selected_brands, selected_platforms, selected_ram):
     # === 2. TOP DESCUENTOS ===
     if n > 0:
         latest = dff['fecha_extraccion'].max()
-        top = dff[dff['fecha_extraccion'] == latest].sort_values('descuento_pct', ascending=False).head(5)
+        top = dff[dff['fecha_extraccion'] == latest].sort_values('descuento_pct', ascending=False).head(3)
     else:
         top = pd.DataFrame()
 
