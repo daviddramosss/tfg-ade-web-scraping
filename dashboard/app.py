@@ -44,6 +44,28 @@ def _is_laptop(nombre: str) -> bool:
     return not any(term in nombre_lower for term in NOISE_TERMS)
 
 
+def _pick_latest_unique_csv(files):
+    """Elige el CSV más reciente, deduplicando por nombre y priorizando /specs/."""
+    if not files:
+        return None
+
+    unique_by_name = {}
+    for f in sorted(files):
+        current = unique_by_name.get(f.name)
+        if current is None:
+            unique_by_name[f.name] = f
+            continue
+
+        current_in_specs = "specs" in current.parts
+        candidate_in_specs = "specs" in f.parts
+        if candidate_in_specs and not current_in_specs:
+            unique_by_name[f.name] = f
+        elif candidate_in_specs == current_in_specs and str(f) > str(current):
+            unique_by_name[f.name] = f
+
+    return max(unique_by_name.values(), key=lambda p: p.name)
+
+
 # ============================================================================
 # CARGA DE DATOS
 # ============================================================================
@@ -77,9 +99,10 @@ def load_data():
     df = df[df['nombre'].apply(_is_laptop)].copy()
 
     # --- Paso 2: Enriquecer con specs del dataset_maestro ---
-    maestro_files = sorted(processed_path.glob("dataset_maestro_*.csv"))
-    if maestro_files:
-        maestro = pd.read_csv(maestro_files[-1])
+    maestro_files = list(processed_path.rglob("dataset_maestro_*.csv"))
+    maestro_latest = _pick_latest_unique_csv(maestro_files)
+    if maestro_latest:
+        maestro = pd.read_csv(maestro_latest)
         spec_cols = ['nombre', 'marca', 'ram_gb', 'almacenamiento_gb',
                      'cpu', 'gpu', 'tamanio_pantalla', 'sistema_operativo']
         spec_cols = [c for c in spec_cols if c in maestro.columns]
@@ -99,11 +122,12 @@ def load_data():
 def load_kaggle_benchmark():
     """Carga el benchmark de Kaggle para análisis comparativo."""
     processed_path = Path("data/processed")
-    kaggle_files = sorted(processed_path.glob("kaggle_benchmark_*.csv"))
-    if not kaggle_files:
+    kaggle_files = list(processed_path.rglob("kaggle_benchmark_*.csv"))
+    kaggle_latest = _pick_latest_unique_csv(kaggle_files)
+    if not kaggle_latest:
         return None
 
-    kg = pd.read_csv(kaggle_files[-1])
+    kg = pd.read_csv(kaggle_latest)
     # Normalizar columnas
     kg['precio_eur'] = kg['price'] * INR_TO_EUR
     if 'ram_gb' not in kg.columns and 'Ram' in kg.columns:

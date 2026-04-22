@@ -31,6 +31,7 @@ import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROCESSED_DIR = BASE_DIR / "data" / "processed"
+SPECS_DIR = PROCESSED_DIR / "specs"
 KAGGLE_DIR = BASE_DIR / "data" / "external" / "kaggle"
 
 
@@ -227,6 +228,7 @@ def run_enrichment() -> pd.DataFrame:
     """Ejecuta el pipeline completo de enriquecimiento."""
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+    SPECS_DIR.mkdir(parents=True, exist_ok=True)
 
     # ----- Paso 1: Cargar datos del scraper -----
     print("\n[1/4] Cargando datos del scraper...")
@@ -271,7 +273,7 @@ def run_enrichment() -> pd.DataFrame:
     print("\n[4/4] Guardando dataset maestro...")
 
     ts = datetime.now().strftime("%Y%m%d_%H%M")
-    output = PROCESSED_DIR / f"dataset_maestro_{ts}.csv"
+    output = SPECS_DIR / f"dataset_maestro_{ts}.csv"
     df.to_csv(output, index=False)
 
     print(f"   ✓ Guardado: {output.name}")
@@ -280,7 +282,7 @@ def run_enrichment() -> pd.DataFrame:
 
     # Guardar Kaggle benchmark aparte si existe
     if kaggle is not None:
-        kaggle_output = PROCESSED_DIR / f"kaggle_benchmark_{ts}.csv"
+        kaggle_output = SPECS_DIR / f"kaggle_benchmark_{ts}.csv"
         kaggle.to_csv(kaggle_output, index=False)
         print(f"   ✓ Benchmark Kaggle: {kaggle_output.name}")
 
