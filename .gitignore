@@ -1,12 +1,40 @@
-# Entorno virtual
+# =============================
+# Python: entornos y caches
+# =============================
 venv/
-
-# Archivos temporales de Python (aparecerán pronto)
+.venv/
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Archivos específicos de macOS
+# =============================
+# Jupyter y sistema operativo
+# =============================
+.ipynb_checkpoints/
 .DS_Store
 
-# Datos (opcional: si vas a manejar Big Data muy pesado, mejor no subirlo a GitHub)
-# data/
+# =============================
+# Logs, temporales y secretos
+# =============================
+*.log
+*.tmp
+.env
+.env.*
+
+# =============================
+# Datos generados por scraping/ETL
+# =============================
+data/raw/*.csv
+data/raw/*.html
+data/raw/*.log
+
+data/processed/precios_portatiles_procesado_*.csv
+data/processed/simulado/*.csv
+data/processed/specs/dataset_maestro_*.csv
+data/processed/specs/kaggle_benchmark_*.csv
+data/processed/kaggle_specs_*.csv
+
+# Dataset externo descargado/local
+data/external/kaggle/*.csv
