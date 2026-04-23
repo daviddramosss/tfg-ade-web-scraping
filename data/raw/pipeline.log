@@ -80,3 +80,139 @@ Name: count, dtype: int64
 [Sun Apr 19 18:13:35 CEST 2026] Iniciando ETL...
 Procesado guardado en: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260419_1813.csv
 [Sun Apr 19 18:13:36 CEST 2026] Pipeline completado.
+[Wed Apr 22 19:42:06 CEST 2026] Iniciando scraping...
+-> PcComponentes: 40 tarjetas detectadas, extrayendo 25...
+Archivo guardado: /Users/david/Documents/scraper/data/raw/precios_portatiles_20260422_1943.csv
+plataforma
+PcComponentes    25
+Amazon           25
+ElCorteIngles    12
+Name: count, dtype: int64
+                                              nombre  ... enlace
+0  Portátil Alurin Flex Advance AMD Ryzen 7-5825U...  ...    NaN
+1  PcCom Revolt 5060 Intel Core i7-14650HX 16" /1...  ...    NaN
+2  MSI Cyborg 15 B2RWFKG-201XES Intel Core 7 240H...  ...    NaN
+3  Portátil Lenovo Legion 5 15AHP10 15.1" AMD Ryz...  ...    NaN
+4  Portátil Acer Nitro V 15 ANV15-52 15.6" Intel ...  ...    NaN
+5  Portátil Lenovo IdeaPad Slim 3 15IRH10 15,3" I...  ...    NaN
+6  Acer Aspire Go 15 AG15-42P-R26T 15.6″ AMD Ryze...  ...    NaN
+7  Portátil Lenovo IdeaPad Slim 3 15AMN8 15,6" AM...  ...    NaN
+8  Acer Aspire Go 15 AG15-71P-7449 Intel Core i7-...  ...    NaN
+9  Portátil Lenovo Legion 5 15AHP10 15.3" AMD Ryz...  ...    NaN
+
+[10 rows x 8 columns]
+[Wed Apr 22 19:43:29 CEST 2026] Iniciando ETL...
+✓ Filas crudas: 62
+✓ Filas procesadas: 55
+✓ Filas filtradas: 7
+
+✓ Procesado guardado en: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260422_1943.csv
+[Wed Apr 22 19:43:30 CEST 2026] Iniciando enriquecimiento de specs...
+
+[1/4] Cargando datos del scraper...
+   ✓ Archivo: precios_portatiles_procesado_20260422_1943.csv
+   ✓ Registros: 55
+
+[2/4] Extrayendo especificaciones del nombre...
+   ✓ marca: 43/55 (78%)
+   ✓ cpu: 46/55 (84%)
+   ✓ ram_gb: 52/55 (95%)
+   △ gpu: 16/55 (29%)
+   ✓ almacenamiento_gb: 51/55 (93%)
+   ✓ tamanio_pantalla: 50/55 (91%)
+   △ sistema_operativo: 23/55 (42%)
+
+[3/4] Cargando benchmark Kaggle...
+   ✓ Kaggle benchmark cargado: 893 productos
+
+[4/4] Guardando dataset maestro...
+   ✓ Guardado: dataset_maestro_20260422_1943.csv
+   ✓ Registros: 55
+   ✓ Columnas: ['nombre', 'precio_actual', 'precio_original', 'descuento', 'valoracion', 'plataforma', 'fecha', 'enlace', 'precio_actual_num', 'precio_original_num', 'descuento_pct', 'fecha_extraccion', 'anio', 'mes', 'dia', 'marca', 'ram_gb', 'almacenamiento_gb', 'cpu', 'gpu', 'tamanio_pantalla', 'sistema_operativo']
+   ✓ Benchmark Kaggle: kaggle_benchmark_20260422_1943.csv
+
+✅ Pipeline completado.
+
+📋 Muestra de datos enriquecidos:
+                                                                                                                                                                                                    nombre  precio_actual_num    marca                      cpu  ram_gb                      gpu  almacenamiento_gb
+0                                                                                                                        Portátil Samsung Galaxy Book4 NP750XGJ-KG4ES, i7-1355U, 16GB, 1TB SSD, 15,6", W11             779.00  Samsung                 i7-1355U    16.0                      NaN             1024.0
+1                                                                                                            Portátil HP OmniBook 7 14-fr0001ns, Intel Core Ultra 5 EVO-225U, 16GB, 1TB SSD, 14" OLED, W11             899.00       HP   Intel Core Ultra 5 EVO    16.0                      NaN             1024.0
+2                                                                                                                              Portátil HP 15-fd1017ns, Intel Core Ultra 7-155H, 32GB, 1TB SSD, 15,6", W11             949.00       HP  Intel Core Ultra 7-155H    32.0                      NaN             1024.0
+3                                                                                                                Portátil Lenovo Yoga Slim 7 14IMH9, Intel Core Ultra 7-155H, 32GB, 1TB SSD, 14" OLED, W11             999.00   Lenovo  Intel Core Ultra 7-155H    32.0                      NaN             1024.0
+4                                                                                         Portátil Gaming HP VICTUS 15-fa2007ns, Intel Core 7-240H, 16GB, 1TB SSD, Nvidia GeForce RTX 5060 8GB, 15,6", W11            1199.00       HP                      NaN    16.0  Nvidia GeForce RTX 5060             1024.0
+5         Ordenador portátil 14 pulgadas Dual-Core hasta 2,6 GHz • 6 GB RAM • 128 GB SSD • UHD portatil • WiFi 5G • Mini-HDMI • Teclado membrana • Diseño sin ventilador • Color plateado • Ratón incluido             209.99      NaN                      NaN     6.0                      NaN              128.0
+6                       Tunhail Ordenador Portatil 15,6 Pulgadas, PC Portatil con Celeron N4000 hasta 2,6 GHz, 8GB DDR4 256GB SSD, Laptop Pantalla IPS FHD 1920 * 1080 Convertible 180°, WiFi 5, Mini HDMI             239.99  Tunhail            Celeron N4000     8.0                      NaN              256.0
+7  ASUS Chromebook CX1505CTA - Ordenador Portátil 15.6" Full HD (Intel N50, 4GB RAM, 128GB eMMC, ChromeOS) QWERTY Funda y ratón incluidos +3 Meses de Google AI Pro con Gemini Pro y 2TB de Almacenamiento             259.00     ASUS                Intel N50     4.0                      NaN             2048.0
+8                 BMAX Ordenador Portátil 15.6" FHD Celeron N95 Upto 3,4 GHz Portatiles 12GB RAM 512GB SSD LPDDR5 Laptop, Win 11 PC Portátil 5G WiFi Notebook BT5.0, USB 3.2x2, Protege el Teclado Español             259.99     BMAX              Celeron N95    12.0                      NaN              512.0
+9    Ordenador Portátil 15,6 pulgadas 8 GB RAM 256 GB SSD N4000 Procesador Pantalla IPS Full HD Win 11 WiFi 5 BT Mini HDMI Laptop Bisagra de 180 Grados Peso Ligero de 1,6 kg para Estudiantes y Empresas.             259.99      NaN                      NaN     8.0                      NaN              256.0
+[Wed Apr 22 19:43:30 CEST 2026] Pipeline completado.
+[Wed Apr 22 19:48:17 CEST 2026] Iniciando scraping...
+-> PcComponentes: 40 tarjetas detectadas, extrayendo 25...
+Archivo guardado: /Users/david/Documents/scraper/data/raw/precios_portatiles_20260422_1949.csv
+plataforma
+PcComponentes    25
+Amazon           25
+ElCorteIngles    12
+Name: count, dtype: int64
+                                              nombre  ... enlace
+0  Portátil Alurin Flex Advance AMD Ryzen 7-5825U...  ...    NaN
+1  PcCom Revolt 5060 Intel Core i7-14650HX 16" /1...  ...    NaN
+2  MSI Cyborg 15 B2RWFKG-201XES Intel Core 7 240H...  ...    NaN
+3  Portátil Lenovo Legion 5 15AHP10 15.1" AMD Ryz...  ...    NaN
+4  Portátil Acer Nitro V 15 ANV15-52 15.6" Intel ...  ...    NaN
+5  Portátil Lenovo IdeaPad Slim 3 15IRH10 15,3" I...  ...    NaN
+6  Acer Aspire Go 15 AG15-42P-R26T 15.6″ AMD Ryze...  ...    NaN
+7  Portátil Lenovo IdeaPad Slim 3 15AMN8 15,6" AM...  ...    NaN
+8  Acer Aspire Go 15 AG15-71P-7449 Intel Core i7-...  ...    NaN
+9  Portátil Lenovo Legion 5 15AHP10 15.3" AMD Ryz...  ...    NaN
+
+[10 rows x 8 columns]
+[Wed Apr 22 19:49:42 CEST 2026] CSV crudo generado: /Users/david/Documents/scraper/data/raw/precios_portatiles_20260422_1949.csv
+[Wed Apr 22 19:49:42 CEST 2026] Iniciando ETL...
+✓ Filas crudas: 62
+✓ Filas procesadas: 54
+✓ Filas filtradas: 8
+
+✓ Procesado guardado en: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260422_1949.csv
+[Wed Apr 22 19:49:42 CEST 2026] CSV procesado generado: /Users/david/Documents/scraper/data/processed/precios_portatiles_procesado_20260422_1949.csv
+[Wed Apr 22 19:49:42 CEST 2026] Iniciando enriquecimiento de specs...
+
+[1/4] Cargando datos del scraper...
+   ✓ Archivo: precios_portatiles_procesado_20260422_1949.csv
+   ✓ Registros: 54
+
+[2/4] Extrayendo especificaciones del nombre...
+   ✓ marca: 43/54 (80%)
+   ✓ cpu: 49/54 (91%)
+   ✓ ram_gb: 53/54 (98%)
+   △ gpu: 16/54 (30%)
+   ✓ almacenamiento_gb: 50/54 (93%)
+   ✓ tamanio_pantalla: 51/54 (94%)
+   △ sistema_operativo: 23/54 (43%)
+
+[3/4] Cargando benchmark Kaggle...
+   ✓ Kaggle benchmark cargado: 893 productos
+
+[4/4] Guardando dataset maestro...
+   ✓ Guardado: dataset_maestro_20260422_1949.csv
+   ✓ Registros: 54
+   ✓ Columnas: ['nombre', 'precio_actual', 'precio_original', 'descuento', 'valoracion', 'plataforma', 'fecha', 'enlace', 'precio_actual_num', 'precio_original_num', 'descuento_pct', 'fecha_extraccion', 'anio', 'mes', 'dia', 'marca', 'ram_gb', 'almacenamiento_gb', 'cpu', 'gpu', 'tamanio_pantalla', 'sistema_operativo']
+   ✓ Benchmark Kaggle: kaggle_benchmark_20260422_1949.csv
+
+✅ Pipeline completado.
+
+📋 Muestra de datos enriquecidos:
+                                                                                                                                                                                                    nombre  precio_actual_num      marca            cpu  ram_gb        gpu  almacenamiento_gb
+0         Ordenador portátil 14 pulgadas Dual-Core hasta 2,6 GHz • 6 GB RAM • 128 GB SSD • UHD portatil • WiFi 5G • Mini-HDMI • Teclado membrana • Diseño sin ventilador • Color plateado • Ratón incluido             209.99        NaN            NaN     6.0        NaN              128.0
+1                       Tunhail Ordenador Portatil 15,6 Pulgadas, PC Portatil con Celeron N4000 hasta 2,6 GHz, 8GB DDR4 256GB SSD, Laptop Pantalla IPS FHD 1920 * 1080 Convertible 180°, WiFi 5, Mini HDMI             239.99    Tunhail  Celeron N4000     8.0        NaN              256.0
+2  ASUS Chromebook CX1505CTA - Ordenador Portátil 15.6" Full HD (Intel N50, 4GB RAM, 128GB eMMC, ChromeOS) QWERTY Funda y ratón incluidos +3 Meses de Google AI Pro con Gemini Pro y 2TB de Almacenamiento             259.00       ASUS      Intel N50     4.0        NaN             2048.0
+3                 BMAX Ordenador Portátil 15.6" FHD Celeron N95 Upto 3,4 GHz Portatiles 12GB RAM 512GB SSD LPDDR5 Laptop, Win 11 PC Portátil 5G WiFi Notebook BT5.0, USB 3.2x2, Protege el Teclado Español             259.99       BMAX    Celeron N95    12.0        NaN              512.0
+4    Ordenador Portátil 15,6 pulgadas 8 GB RAM 256 GB SSD N4000 Procesador Pantalla IPS Full HD Win 11 WiFi 5 BT Mini HDMI Laptop Bisagra de 180 Grados Peso Ligero de 1,6 kg para Estudiantes y Empresas.             259.99        NaN            NaN     8.0        NaN              256.0
+5                           FUNYET Ordenador Portátil, 16 GB de RAM y 256 GB de SSD,Nuevo Laptop de 15,6 Pulgadas de 2026, Pentium Gold 4425Y Portátil,IPS FHD 1920 x 1080,5000 mAh，Teclado numérico，WiFi5             261.72        NaN   Pentium Gold    16.0        NaN                NaN
+6    FUNYET Nuevo Ordenador Portátil 15.6” RAM 16GB SSD 256GB Soporta TF 1TB Win11 Pro 1920x1080 FHD (Procesador 2 Cores 4425Y), Portatil con WIFI5, BT4.2, USB3.0, HDMI para Estudiantes y Oficina-QWERTY             279.99        NaN            NaN     NaN        NaN             1024.0
+7                        HP 15-fd0261ns - Ordenador portátil de 15.6" FHD (Intel N100, 4GB RAM, 128GB UFS, Intel UHD, Windows 11) Plata - Teclado QWERTY Español - Incluye Microsoft 365 Personal 12 Meses             284.00  Microsoft     Intel N100     4.0  Intel UHD              128.0
+8        15.6 Pulgadas Ordenador Portatil, Win 11 PC Portátil Celeron N4000 CPU, Portátil con 12GB LPDDR4 512GB SSD, 1920*1080 IPS FHD Pantalla Laptop, TF Card Slot expansión hasta 1 TB, Mini HDMI+BT4.2             289.99        NaN  Celeron N4000    12.0        NaN             1024.0
+9                             15.6 Pulgadas Ordenador Portatil, Procesador N95 hasta 3.4 GHz, Portatil con 16GB RAM 512GB SSD, 1920 * 1080 IPS FHD Pantalla Laptop, BT5.0, USB 3.2, HDMI y Tipo C, WIFI5.0             289.99        NaN            NaN    16.0        NaN              512.0
+[Wed Apr 22 19:49:43 CEST 2026] CSV maestro generado: /Users/david/Documents/scraper/data/processed/specs/dataset_maestro_20260422_1949.csv
+[Wed Apr 22 19:49:43 CEST 2026] CSV benchmark generado: /Users/david/Documents/scraper/data/processed/specs/kaggle_benchmark_20260422_1949.csv
+[Wed Apr 22 19:49:43 CEST 2026] Pipeline completado.
