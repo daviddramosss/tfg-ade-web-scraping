@@ -15,12 +15,11 @@ import pandas as pd
 
 PROCESSED_DIR = Path("data/processed")
 
-# Rango de fechas a simular (ajusta si empezaste scraping en otra fecha)
+# Rango de fechas a simular 
 START_DATE = datetime(2026, 4, 1)
 END_DATE = datetime(2026, 4, 4)  
 
 # Seed para reproducibilidad 
-# (mismo resultado cada vez que ejecutes)
 random.seed(42)
 np.random.seed(42)
 
