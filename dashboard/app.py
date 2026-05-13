@@ -420,10 +420,11 @@ app.layout = html.Div([
             ])], lg=3, md=6, sm=12, style={'marginBottom': '20px'}),
 
             dbc.Col([html.Div(className="kpi-card", children=[
-                html.Div("🧠", className="kpi-icon"),
-                html.Div("Specs Extraídas", className="kpi-label"),
-                html.Div(id="kpi-specs", className="kpi-value", children="0 %")
+                html.Div("🏷️", className="kpi-icon"),
+                html.Div("Marcas Activas", className="kpi-label"),
+                html.Div(id="kpi-marcas", className="kpi-value", children="0")
             ])], lg=3, md=6, sm=12, style={'marginBottom': '20px'}),
+
         ], style={'marginBottom': '40px'}),
 
         # FILA: Evolución temporal
@@ -522,7 +523,7 @@ def _empty_fig(msg="Sin datos disponibles"):
     [Output('kpi-productos', 'children'),
      Output('kpi-precio', 'children'),
      Output('kpi-descuento', 'children'),
-     Output('kpi-specs', 'children'),
+     Output('kpi-marcas', 'children'),
      Output('line-evolution', 'figure'),
      Output('top-discounts-table', 'children'),
      Output('scatter-dispersion', 'figure'),
@@ -550,16 +551,12 @@ def update_dashboard(selected_brands, selected_platforms, selected_ram):
     precio_medio = dff['precio_actual_num'].mean() if n > 0 and dff['precio_actual_num'].notna().any() else 0
     max_descuento = dff['descuento_pct'].max() if n > 0 and dff['descuento_pct'].notna().any() else 0
 
-    # Cobertura de specs
-    if n > 0 and 'cpu' in dff.columns:
-        specs_pct = dff['cpu'].notna().sum() / n * 100
-    else:
-        specs_pct = 0
+    num_marcas = dff['marca'].nunique() if n > 0 and 'marca' in dff.columns else 0
 
     kpi_productos = f"{num_productos:.0f}"
     kpi_precio = f"{precio_medio:.0f} €"
     kpi_descuento = f"{max_descuento:.1f} %"
-    kpi_specs = f"{specs_pct:.0f} %"
+    kpi_marcas = f"{num_marcas:.0f}"
 
     # === 1. SERIE TEMPORAL ===
     if n > 0:
@@ -780,7 +777,7 @@ def update_dashboard(selected_brands, selected_platforms, selected_ram):
     else:
         fig_bench = _empty_fig("Benchmark no disponible (falta kaggle_benchmark_*.csv)")
 
-    return (kpi_productos, kpi_precio, kpi_descuento, kpi_specs,
+    return (kpi_productos, kpi_precio, kpi_descuento, kpi_marcas,
             fig_line, table, fig_box,
             fig_ram, fig_cpu, fig_bench)
 
