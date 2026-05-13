@@ -1,24 +1,3 @@
-"""
-simulate_historical_data.py
-
-Genera histórico simulado de precios para el periodo previo al inicio del
-scraping real. Aplica un modelo de series temporales con:
-
-  - Tendencia suave (los precios no cambian bruscamente sin motivo)
-  - Eventos puntuales (descuentos temporales, picos)
-  - Ruido controlado (volatilidad distinta por plataforma)
-  - Suelo y techo del precio (no baja del 85% ni sube del 110% del precio base)
-
-IMPORTANTE: añade la columna `es_simulado=True` a todas las filas generadas
-para distinguirlas claramente de los datos reales del scraper.
-
-Uso:
-    python3 simulate_historical_data.py
-
-Input:  Último /data/processed/precios_portatiles_procesado_*.csv (datos reales)
-Output: /data/processed/precios_portatiles_procesado_YYYYMMDD_0000.csv
-        (un archivo por día desde el 1 de abril hasta el día anterior al real)
-"""
 
 from __future__ import annotations
 
@@ -38,7 +17,7 @@ PROCESSED_DIR = Path("data/processed")
 
 # Rango de fechas a simular (ajusta si empezaste scraping en otra fecha)
 START_DATE = datetime(2026, 4, 1)
-END_DATE = datetime(2026, 4, 20)  # El día anterior a tu primer scraping real
+END_DATE = datetime(2026, 4, 4)  
 
 # Seed para reproducibilidad 
 # (mismo resultado cada vez que ejecutes)
