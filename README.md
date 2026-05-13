@@ -6,7 +6,6 @@ Proyecto de TFG orientado a la monitorizacion de precios de portatiles en e-comm
 
 - Capturar precios de varias plataformas (Amazon, PcComponentes, El Corte Ingles).
 - Transformar y normalizar datos para analisis temporal.
-- Simular historico inicial para cubrir periodo previo al scraping real.
 - Extracción de datos previos al scrapping con bases de datos reales de precios de portatiles
 - Enriquecer productos con especificaciones tecnicas (RAM, CPU, GPU, almacenamiento, pantalla).
 - Visualizar tendencias, descuentos y oportunidades en un dashboard interactivo.
@@ -127,21 +126,10 @@ bash scripts/run_daily_pipeline.sh
 
 El script registra logs en data/raw/pipeline.log.
 
-## Datos reales vs simulados
-
-- Datos simulados:
-	- Nombre de archivo terminado en _0000.csv.
-	- Columna es_simulado con valor True en filas generadas.
-	- Ubicacion: data/processed/simulado.
-- Datos reales:
-	- Archivos procesados con timestamp HHMM real.
-	- Columna es_simulado ausente o False.
-	- Ubicacion: data/processed.
 
 ## Notas del dashboard
 
 - La carga de datos es recursiva dentro de data/processed.
-- Se normaliza es_simulado=False cuando la columna no existe.
 - El dashboard combina datos reales y simulados para series temporales completas.
 - Los CSV de specs (dataset_maestro y kaggle_benchmark) se buscan tambien de forma recursiva y con criterio de seleccion para evitar conflictos con archivos legacy.
 
